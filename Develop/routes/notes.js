@@ -1,19 +1,20 @@
-const fb = require('express').Router();
+const notes = require('express').Router();
+const fs = require('fs');
 const { v4: uuidv4 } = require('uuid');
 const { readAndAppend, readFromFile } = require('../helpers/fsUtils');
 
 // GET Route for retrieving all the notes
-fb.get('/', (req, res) =>
+notes.get('/', (req, res) =>
     readFromFile('./db/notes.json').then((data) => res.json(JSON.parse(data)))
 );
 
 // POST Route for submitting notes
-fb.post('/', (req, res) => {
+notes.post('/', (req, res) => {
     // Destructuring assignment for the items in req.body
     const { title, text } = req.body;
 
     // If all the required properties are present
-    if (email && notesType && notes) {
+    if (title && text) {
         // Variable for the object we will save
         const newNotes = {
             title,
@@ -34,4 +35,4 @@ fb.post('/', (req, res) => {
     }
 });
 
-module.exports = fb;
+module.exports = notes;
