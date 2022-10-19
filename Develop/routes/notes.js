@@ -19,7 +19,7 @@ notes.post('/', (req, res) => {
         const newNotes = {
             title,
             text,
-            notes_id: uuidv4(),
+            id: uuidv4(),
         };
 
         readAndAppend(newNotes, './db/notes.json');
@@ -33,6 +33,22 @@ notes.post('/', (req, res) => {
     } else {
         res.json('Error in posting notes');
     }
+});
+
+notes.delete("/:id", (req, res) => {
+
+    console.info(`${req.method}`);
+
+    const notesId = req.params.id.toString();
+    const file = JSON.parse(fs.readFileSync("./db/notes.json", "utf8"));
+    const newNotes = file.filter(notes =>
+        notes.id.toString() !== notesId
+    );
+
+    fs.writeFileSync('./db/notes.json', JSON.stringify(newNotes));
+    res.json(newNotes);
+
+    console.log(`${req.method}`);
 });
 
 module.exports = notes;
